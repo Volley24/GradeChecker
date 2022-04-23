@@ -16,8 +16,13 @@ This is currently running on my Ubuntu Server on a spare laptop, automatically r
 (6.a The bot only alerts via mention the people who have the corresponding subject.)
 7. The bot writes this to a file named `pdf-lengths.txt` to use if the bot ever restarts.
 8. The bot does this every hour, however only logging-in to google once every day.
+  
+## Extra
+This repo also has an additional file, called `get_schedule.js`, which grabs my schedule and posts it on google chat via webhook   
 
 ## Screenshots
 [Bot running in terminal](/terminal.png)
+  
 [Google Chat Alert via Webhook](/google_chat_alert.png) 
+  
 [Discord Alert via Webhook](/discord_alert.png) 
