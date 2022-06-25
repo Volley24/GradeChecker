@@ -29,28 +29,19 @@ async function launch(website, debug = False){
     return page;
 }
 
+async function parentPortalLogin(page, email, password){
+
+}
 async function googleLogin(page, email, password){
-    const [newPage] = await Promise.all([
-        new Promise(resolve => page.once('popup', resolve)),
-        page.click('[target="_blank"]'),
-    ]);
-     
-    await newPage.waitForSelector('input[type="email"]');
-    await newPage.type('input[type="email"]', email);
-    await newPage.keyboard.press('Enter');
-     
-    await Promise.all([
-        newPage.waitForNavigation(),
-        await newPage.waitForSelector('input[type="password"]', { visible: true }),
-        await newPage.type('input[type="password"]', password)
-    ]);
-     
-    await Promise.all([
-        newPage.waitForFunction(() => location.href === "https://app3.ecolecatholique.ca/sp/parent/portail_parent/main.htm"),
-        await newPage.keyboard.press('Enter')
-    ]);
+    await page.waitForSelector('input[type="text"]');
+    await page.type('input[type="email"]', email);
     
-    return newPage;
+    await page.waitForSelector('input[type="password"]');
+    await page.type('input[type="password"]', password);
+    
+    await page.keyboard.press('Enter');
+     
+    await page.waitForFunction(() => location.href === "https://app3.ecolecatholique.ca/sp/parent/portail_parent/main.htm")
 }
 
 async function get(uri, headers, callback){

@@ -1,3 +1,6 @@
+//todo: cleanup
+
+// ----- Libraries + Setup -----
 const setup = require('./setup.js');
 const https = require('https')
 const fs = require('fs')
@@ -25,20 +28,21 @@ let ignoreFirst = process.argv[2] == "yes";
 
 console.log(`Ignore first grades: ${ignoreFirst}`);
 
+// ----- Program start -----
 (async () => {
-  const loginPage = await setup.launch(website, false);
+  const portalPage = await setup.launch(website, false);
   console.log("Launched puppeteer");
 
-  const page = await setup.googleLogin(loginPage, secrets[0], secrets[1]);
+  await setup.parentPortalLogin(portalPage, secrets[0], secrets[1]);
   console.log("Logged-in to google");
    
   //Click on the button for grade results
-  await page.waitForSelector('button[data-targetpage="pageBulletin"]', { visible: true });
-  await page.evaluate(() => {
+  await portalPage.waitForSelector('button[data-targetpage="pageBulletin"]', { visible: true });
+  await portalPage.evaluate(() => {
     document.querySelector('button[data-targetpage="pageBulletin"]').click();
   });
  
-  await page.waitForSelector('[id="pageBulletin"]', { visible: true });
+  await portalPage.waitForSelector('[id="pageBulletin"]', { visible: true });
   console.log("At grade section");
 
 

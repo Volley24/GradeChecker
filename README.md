@@ -1,6 +1,6 @@
 # GradeChecker
 
-A simple tool written with node.js and puppeteer that scans for new grades on my personal school website.
+A simple tool written with node.js and a headless chromium library, puppeteer, that scans for new grades on my personal school website.
 
 This tool visits my personal school portal, logs-in with Google via automated button clicks, provided by the puppeteer library, and sends HTTP GET requests to each PDF file to see if grades are up.
 
@@ -14,8 +14,8 @@ This is currently running on my Ubuntu Server on a spare laptop, automatically r
 5. The bot simply checks for a header to change, Content-Length, which signals the PDF had been altered, and that a new grade is available.
 6. The bot sends the news that the grade is available via webhooks in both google chat and discord.
 (6.a The bot only alerts via mention the people who have the corresponding subject.)
-7. The bot writes this to a file named `pdf-lengths.txt` to use if the bot ever restarts.
-8. The bot does this every hour, however only logging-in to google once every day.
+7. The bot writes this to a file named `pdf-lengths.txt` to read once the bot restarts.
+8. The bot repeats steps 4-7 until it shuts down for the night.
   
 ## Extra
 This repo also has an additional file, called `get_schedule.js`, which grabs my schedule and posts it on google chat via webhook   
