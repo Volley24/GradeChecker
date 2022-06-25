@@ -30,13 +30,15 @@ const secrets = fs.readFileSync("secrets.txt", "utf8").split(",");
     //Grab first 
     const selector = await page.$$("div[id=\"horaire-container\"] > table > tbody > tr")[0];
 
+    //Grab boxes
+    const boxes = await page.$$("td", selector);
+
+    // Compare first box to current one:
+    // If the same: new schedule not up
+    // If different: new schedule up !!!
     
-
-
-    //select[class=\"monthDropDown form-control\
-
-    await portalPage.click()
-
+    
+    // wait for new pages on report card to popup
     const [reportCardPage] = await Promise.all([
         new Promise(resolve => portalPage.once('popup', resolve)),
         portalPage.click('[target="_blank"]'),
