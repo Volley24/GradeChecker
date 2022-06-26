@@ -1,23 +1,30 @@
+const fs = require('fs');
 const setup = require('./setup.js');
 
 const secrets = fs.readFileSync("secrets.txt", "utf8").split(",");
 
+const website = "https://app3.ecolecatholique.ca/sp/parent/portail_parent/index.htm";
+
 
 (async function(){
-    const portalPage = await setup.launch(website, false);
+    const portalPage = await setup.launch(website, true);
     console.log("Launched puppeteer");
   
-    await setup.parentPortalLogin(portalPage, secrets[0], secrets[1]);
+    await setup.googleLogin(portalPage, secrets[0], secrets[1]);
     console.log("Logged-in to parent portal");
 
     //Click horaire
-    await click('button[data-targetpage="pageHoraire"]');
+    await click(portalPage, 'button[data-targetpage="pageHoraire"]');
+    console.log("Clicking horaire");
 
     //Click the drop down menu thingy
-    await click('select[class="monthDropDown form-control"]');
+    await click(portalPage, 'select[class="monthDropDown form-control"]');
+console.log("drop down thingy");
 
     //Click the drop down menu thingy
-    await click('option[value="09"]');
+    await click(portalPage, 'option[value="09"]');
+console.log("thingy");
+
 
     //Grab first 
     const selector = await page.$$("div[id=\"horaire-container\"] > table > tbody > tr")[0];
@@ -28,9 +35,9 @@ const secrets = fs.readFileSync("secrets.txt", "utf8").split(",");
     let info = getHTMLParamaters(box)['alt'];
 
     if (info != secrets[4]){
-        sendToDiscord("This is a test, and it failed.");
+        sendToGoogleChat("This is a test, and it failed.");
     }else{
-        sendToDiscord("This is a test, and it passed.");
+        sendToGoogleChat("This is a test, and it passed.");
     }
 
     // Compare first box to current one:
@@ -48,11 +55,11 @@ const secrets = fs.readFileSync("secrets.txt", "utf8").split(",");
     let numOfReportCards = await reportCardPage.$$("tbody > tr").length;
 
     if (numOfReportCards == 10){
-        sendToDiscord("Report cards are up! (ur code broke maxim lmao)");
+        sendToGoogleChat("ur code broke maxim lmao");
     }else{
-        sendToDiscord("Another test, which passed")
+        sendToGoogleChat("Another test, which passed")
     }
-});
+})();
 
 function getHTMLParamaters(htmlObj){
     let paramsObj = {};
@@ -69,10 +76,12 @@ function getHTMLParamaters(htmlObj){
 }
 
 async function click(page, selector){
-    await page.waitForSelector(selector, { visible: true });
+    await page.waitForSelector(selector);
+console.log("awaited selector")
     await page.evaluate(() => {
         document.querySelector(selector).click();
     });
+console.log("selected selector")
 }
 
 function sendToGoogleChat(message){
